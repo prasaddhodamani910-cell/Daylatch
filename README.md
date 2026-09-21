@@ -28,6 +28,8 @@ Prasad Dhodamani
 ● Solo Creator **Prasad Basavaraj Dhodamani**.
 ● Age on the release ** 17 years**.
 
+---
+
 ### License
 **Copyright (c) 2026 Prasad Dhodamani.**
 
