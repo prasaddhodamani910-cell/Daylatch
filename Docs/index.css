@@ -1,0 +1,143 @@
+/*
+ * UXMAGIC AI — theme entry for the generated React export.
+ *
+ * Import once from your app entry (e.g. main.tsx):  import "./index.css";
+ * Requires Tailwind v4 — npm install tailwindcss @tailwindcss/vite
+ *
+ * Retheme the whole export by editing the :root values below.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&family=Fira+Code:wght@300..700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --font-family-sans: var(--font-sans);
+  --font-family-heading: var(--font-heading);
+  --font-family-mono: var(--font-mono);
+  /* Tailwind v4's font namespace is --font-*, NOT --font-family-*.
+   *
+   * Without this line the font-heading utility does not exist at all,
+   * so every h1–h6 the design prompt mandates (font-heading) silently
+   * inherited the body's font-sans. A user could set --font-heading a
+   * dozen times, watch the tool report success, and never see the
+   * typeface change — the "font applied but not reflected" report.
+   *
+   * font-sans and font-mono are Tailwind built-ins and already read
+   * :root, which is why only headings were broken. The fallback chain
+   * keeps themes that never set a heading font rendering the body face
+   * instead of nothing. */
+  --font-heading: var(--font-heading, var(--font-sans, ui-sans-serif, system-ui, sans-serif));
+}
+
+/* Every filled surface carries its own text colour.
+ *
+ * Without this, <div class="bg-accent"> inherits --foreground from
+ * <html> — a colour chosen to contrast the PAGE, not the accent fill. On
+ * a dark theme with a bright accent that renders near-white text on
+ * near-white (or near-black on near-black): the invisible text users
+ * report. Pairing each fill with its own foreground makes the readable
+ * result the default instead of something the model has to remember.
+ *
+ * These sit in @layer base deliberately. Any explicit text-* utility is
+ * in @layer utilities and therefore still wins, so an intentional colour
+ * choice is never overridden. The neutral surfaces (background, muted)
+ * are left out: --foreground is already guaranteed readable on those, and
+ * forcing --muted-foreground would wash out headings in muted panels.
+ */
+@layer base {
+  .bg-card { color: var(--card-foreground); }
+  .bg-popover { color: var(--popover-foreground, var(--card-foreground)); }
+  .bg-primary { color: var(--primary-foreground); }
+  .bg-secondary { color: var(--secondary-foreground); }
+  .bg-accent { color: var(--accent-foreground, var(--foreground)); }
+  .bg-tertiary { color: var(--tertiary-foreground, var(--primary-foreground)); }
+  .bg-destructive { color: var(--destructive-foreground, var(--primary-foreground)); }
+}
+
+:root {
+  --background: #FEFEFE;
+  --foreground: #423D53;
+  --primary: #A5EDA8;
+  --primary-foreground: #423D53;
+  --secondary: #EAE8F4;
+  --secondary-foreground: #423D53;
+  --tertiary: #D0EAED;
+  --muted: #F5F4F8;
+  --muted-foreground: #6E687C;
+  --accent: #FEDFE9;
+  --accent-foreground: #423D53;
+  --card: #FFFFFF;
+  --card-foreground: #423D53;
+  --destructive: #D87993;
+  --border: #D7D2E1;
+  --input: #D7D2E1;
+  --ring: #A5EDA8;
+  --radius: 0.75rem;
+  --font-sans: Nunito,Arial,sans-serif;
+  --font-heading: Nunito,Arial,sans-serif;
+  --font-mono: JetBrains Mono, monospace;
+  --shadow-offset-x: 0;
+  --shadow-offset-y: 10;
+  --shadow-blur: 30;
+  --shadow-spread: -8;
+  --shadow-color: rgba(15, 23, 42, 0.12);
+  --tertiary-foreground: #423D53;
+  --destructive-foreground: #2F2F2F;
+  --primary-text: #3F8445;
+  --secondary-text: #76757F;
+  --tertiary-text: #637A7D;
+  --accent-text: #8A6F78;
+  --destructive-text: #B45974;
+}
+
+.brand-gradient { background-image: linear-gradient(135deg, var(--primary), var(--accent)); }
+.shadow-theme {
+  box-shadow:
+    calc(var(--shadow-offset-x, 0) * 1px) calc(var(--shadow-offset-y, 10) * 1px)
+    calc(var(--shadow-blur, 30) * 1px) calc(var(--shadow-spread, -8) * 1px)
+    var(--shadow-color, rgba(15, 23, 42, 0.12));
+}
+
+/* Brand colours used as TEXT resolve to a legibility-adjusted variant.
+ *
+ * --primary and friends are tuned to look right as FILLS; painted as text
+ * on the page they are routinely too light — a #16A34A "+8.4%" on a white
+ * card measures 3.3:1. The --*-text tokens are the same hue and chroma
+ * with lightness nudged just far enough to clear AA on the page and card
+ * surfaces, so fills keep the exact brand colour while text becomes
+ * readable.
+ *
+ * This block is intentionally UNLAYERED: unlayered declarations outrank
+ * every cascade layer, so these beat Tailwind's own text-* utilities. The
+ * var() fallbacks leave documents that predate the derived tokens
+ * rendering exactly as before.
+ */
+.text-primary { color: var(--primary-text, var(--primary)); }
+.text-secondary { color: var(--secondary-text, var(--secondary)); }
+.text-tertiary { color: var(--tertiary-text, var(--tertiary)); }
+.text-accent { color: var(--accent-text, var(--accent)); }
+.text-destructive { color: var(--destructive-text, var(--destructive)); }

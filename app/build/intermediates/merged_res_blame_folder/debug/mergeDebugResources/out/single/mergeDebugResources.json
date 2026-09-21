@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.prasad.daylatch.app-debug-49:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.prasad.daylatch.app-main-51:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "/data/data/com.termux/files/home/.gradle/daemon/9.7.1/com.prasad.daylatch.app-debug-49:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/data/data/com.termux/files/home/.gradle/daemon/9.7.1/com.prasad.daylatch.app-main-51:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.prasad.daylatch.app-debug-49:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.prasad.daylatch.app-main-51:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.prasad.daylatch.app-debug-49:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.prasad.daylatch.app-main-51:/mipmap-anydpi-v26/ic_launcher.xml"
+    }
+]

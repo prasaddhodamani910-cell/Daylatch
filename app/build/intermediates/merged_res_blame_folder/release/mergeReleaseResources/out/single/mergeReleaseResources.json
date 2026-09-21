@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.prasad.daylatch.app-release-56:/xml_daylatch_widget_info.xml.flat",
+        "source": "com.prasad.daylatch.app-main-57:/xml/daylatch_widget_info.xml"
+    },
+    {
+        "merged": "com.prasad.daylatch.app-release-56:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.prasad.daylatch.app-main-57:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.prasad.daylatch.app-release-56:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.prasad.daylatch.app-main-57:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.prasad.daylatch.app-release-56:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.prasad.daylatch.app-main-57:/drawable/ic_launcher_foreground.xml"
+    }
+]

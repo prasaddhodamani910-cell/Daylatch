@@ -1,0 +1,2 @@
+460b8c136f6365843f0e908ecfbc3a39ad19f44a2db26cde7568d131160f7751  release/v2.0.0/Daylatch-v2.0.0-debug.apk
+1b8f92a0c77eec59c0a2ecfed2360d7f0548af0b2737b197ece8c32b17c790b8  release/v2.0.0/Daylatch-v2.0.0-release-unsigned.apk

@@ -1,0 +1,464 @@
+/*
+ * UXMAGIC AI — Generated React export
+ *
+ * Installation Steps:
+ *   npm install react react-dom chart.js react-chartjs-2 @iconify/react
+ *   npm install tailwindcss @tailwindcss/vite
+ * (User must configure Vite + @tailwindcss/vite.)
+ *
+ * Import the companion stylesheet once from your app entry:
+ *   import "./index.css";
+ * It carries the theme tokens this component's classes depend on — without it
+ * the screen renders unstyled. Fonts load from it too.
+ *
+ * Use npm packages only: React, Tailwind className strings, chart.js + react-chartjs-2 for charts, @iconify/react Icon component for icons (<iconify-icon> → <Icon icon="collection:name" />).
+*/
+
+import React, { useState } from 'react';
+import { Icon } from '@iconify/react';
+import { Line, Doughnut } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+  ArcElement,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+  ArcElement
+);
+
+// Helper Doughnut Chart Component
+function DoughnutChart({ value, color }: { value: number; color: string }) {
+  const data = {
+    datasets: [
+      {
+        data: [value, 100 - value],
+        backgroundColor: [color, '#F5F4F8'],
+        borderWidth: 0,
+        borderRadius: 8,
+      },
+    ],
+  };
+
+  const options = {
+    maintainAspectRatio: false,
+    cutout: '74%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+    },
+  };
+
+  return <Doughnut data={data} options={options} />;
+}
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newHabitName, setNewHabitName] = useState('');
+  const [newHabitDesc, setNewHabitDesc] = useState('');
+
+  // Today's habits state
+  const [todayHabits, setTodayHabits] = useState([
+    { id: 1, name: 'Hydrate with water', done: true, time: 'Done' },
+    { id: 2, name: 'Morning walk', done: true, time: 'Done' },
+    { id: 3, name: 'Read 20 pages', done: false, time: 'Tonight' },
+  ]);
+
+  // Main habits grid data
+  const [habitsList, setHabitsList] = useState([
+    {
+      id: 1,
+      name: 'Hydrate with 2.5L water',
+      desc: 'Feel refreshed',
+      history: [
+        'tertiary', 'tertiary', 'tertiary', 'tertiary', 'empty',
+        'tertiary', 'tertiary', 'tertiary', 'primary', 'primary',
+        'primary', 'primary', 'empty', 'primary', 'primary',
+        'empty', 'accent', 'accent', 'empty', 'empty'
+      ],
+      goal: 16
+    },
+    {
+      id: 2,
+      name: '30-minute movement',
+      desc: 'Move with joy',
+      history: [
+        'tertiary', 'empty', 'tertiary', 'tertiary', 'tertiary',
+        'empty', 'tertiary', 'primary', 'primary', 'empty',
+        'primary', 'primary', 'primary', 'empty', 'primary',
+        'accent', 'accent', 'empty', 'empty', 'empty'
+      ],
+      goal: 14
+    },
+    {
+      id: 3,
+      name: '8-hour sleep ritual',
+      desc: 'Lights out by 10:30',
+      history: [
+        'empty', 'tertiary', 'tertiary', 'tertiary', 'tertiary',
+        'tertiary', 'tertiary', 'primary', 'empty', 'primary',
+        'primary', 'primary', 'primary', 'primary', 'primary',
+        'accent', 'accent', 'accent', 'empty', 'empty'
+      ],
+      goal: 17
+    },
+    {
+      id: 4,
+      name: 'Read 20 pages',
+      desc: 'Make room for ideas',
+      history: [
+        'empty', 'tertiary', 'empty', 'tertiary', 'tertiary',
+        'tertiary', 'empty', 'primary', 'primary', 'empty',
+        'primary', 'primary', 'empty', 'empty', 'primary',
+        'accent', 'empty', 'empty', 'empty', 'empty'
+      ],
+      goal: 10
+    }
+  ]);
+
+  // Toggle today's habit status
+  const handleToggleTodayHabit = (id: number) => {
+    setTodayHabits(prev =>
+      prev.map(habit => {
+        if (habit.id === id) {
+          const nextDone = !habit.done;
+          return {
+            ...habit,
+            done: nextDone,
+            time: nextDone ? 'Done' : 'Tonight'
+          };
+        }
+        return habit;
+      })
+    );
+  };
+
+  // Add a new habit
+  const handleAddHabit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newHabitName.trim()) return;
+
+    const newHabit = {
+      id: Date.now(),
+      name: newHabitName,
+      desc: newHabitDesc || 'Daily routine',
+      history: Array(20).fill('empty'),
+      goal: 0
+    };
+
+    setHabitsList(prev => [...prev, newHabit]);
+    
+    // Also add to today's list
+    setTodayHabits(prev => [
+      ...prev,
+      { id: Date.now(), name: newHabitName, done: false, time: 'Tonight' }
+    ]);
+
+    setNewHabitName('');
+    setNewHabitDesc('');
+    setIsAddModalOpen(false);
+  };
+
+  // Line Chart Data
+  const lineData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        data: [62, 78, 58, 84, 71, 91, 78],
+        borderColor: '#423D53',
+        backgroundColor: 'rgba(208, 234, 237, 0.4)',
+        fill: true,
+        tension: 0.42,
+        pointBackgroundColor: '#A5EDA8',
+        pointBorderColor: '#423D53',
+        pointRadius: 4,
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const lineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#6E687C' },
+      },
+      y: {
+        display: false,
+        beginAtZero: true,
+        max: 100,
+      },
+    },
+  };
+
+  // Calculate dynamic stats based on today's checklist
+  const completedTodayCount = todayHabits.filter(h => h.done).length;
+  const totalTodayCount = todayHabits.length;
+
+  return (
+    <div className="min-h-screen w-full bg-background flex flex-col relative font-sans text-foreground">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary shadow-md">
+              <Icon icon="lucide:check" className="text-xl text-primary-foreground" />
+            </div>
+            <div>
+              <p className="font-heading text-lg font-bold tracking-tight">Habit Garden</p>
+              <p className="text-xs text-muted-foreground">Small steps, every day</p>
+            </div>
+          </div>
+          
+          <div className="hidden items-center gap-2 lg:flex">
+            <button 
+              onClick={() => setActiveTab('Dashboard')}
+              className={`min-h-11 rounded-lg px-4 text-sm font-semibold transition-colors ${activeTab === 'Dashboard' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Dashboard
+            </button>
+            <button 
+              onClick={() => setActiveTab('Insights')}
+              className={`min-h-11 rounded-lg px-4 text-sm font-semibold transition-colors ${activeTab === 'Insights' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Insights
+            </button>
+            <button 
+              onClick={() => setActiveTab('Settings')}
+              className={`min-h-11 rounded-lg px-4 text-sm font-semibold transition-colors ${activeTab === 'Settings' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Settings
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button className="flex h-11 w-11 items-center justify-center rounded-lg bg-muted hover:bg-secondary transition-colors">
+              <Icon icon="lucide:bell" className="text-lg" />
+            </button>
+            <img 
+              src="https://randomuser.me/api/portraits/women/44.jpg" 
+              alt="Maya's profile" 
+              className="h-10 w-10 rounded-full border-2 border-primary object-cover"
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="mx-auto w-full max-w-[1440px] flex-1 px-5 py-6 lg:px-6">
+        <div className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+          <div>
+            <p className="mb-1 text-sm font-semibold text-primary">OCTOBER 2023</p>
+            <h1 className="font-heading text-2xl font-bold text-balance">Your month of mindful momentum</h1>
+            <p className="mt-1 text-sm text-muted-foreground">Track the routines that make you feel like you.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="flex items-center min-h-11 rounded-lg border border-border bg-card px-4 text-sm font-semibold hover:bg-muted transition-colors">
+              <Icon icon="lucide:calendar" className="mr-2 text-base" />
+              October 2023
+            </button>
+            <button 
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex items-center min-h-11 rounded-lg bg-primary px-4 text-sm font-bold shadow-md hover:opacity-90 transition-opacity"
+            >
+              <Icon icon="lucide:plus" className="mr-1 text-lg" />
+              Add habit
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+          {/* Left Column */}
+          <div className="space-y-6">
+            {/* Charts Section */}
+            <section className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_220px]">
+              <div className="rounded-xl border border-border bg-card p-5 shadow-md">
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold tracking-wide text-muted-foreground">DAILY PROGRESS</p>
+                    <h2 className="font-heading text-lg font-semibold">A lovely 7-day rhythm</h2>
+                  </div>
+                  <span className="rounded-full bg-tertiary px-3 py-1 text-xs font-bold">This week</span>
+                </div>
+                <div className="h-40 overflow-hidden">
+                  <Line data={lineData} options={lineOptions} />
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between rounded-xl border border-border bg-card p-5 shadow-md">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-xs font-bold tracking-wide text-muted-foreground">MONTHLY SCORE</p>
+                    <h2 className="mt-1 font-heading text-lg font-semibold">You’re showing up</h2>
+                  </div>
+                  <Icon icon="lucide:sparkles" className="text-xl text-primary" />
+                </div>
+                <div className="relative mx-auto h-32 w-32 my-2">
+                  <DoughnutChart value={78} color="#A5EDA8" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="font-heading text-2xl font-bold">78%</span>
+                    <span className="text-[11px] text-muted-foreground">complete</span>
+                  </div>
+                </div>
+                <p className="text-center text-xs text-muted-foreground">+8% from September</p>
+              </div>
+            </section>
+
+            {/* Habits Grid Section */}
+            <section className="overflow-hidden rounded-xl border border-border bg-card shadow-md">
+              <div className="flex flex-col justify-between gap-3 border-b border-border px-5 py-4 md:flex-row md:items-center">
+                <div>
+                  <p className="text-xs font-bold tracking-wide text-muted-foreground">DAILY HABITS</p>
+                  <h2 className="font-heading text-lg font-semibold">October check-in</h2>
+                </div>
+                <div className="flex items-center gap-3 text-xs font-semibold text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <i className="h-2.5 w-2.5 rounded-full bg-tertiary"></i>Done
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <i className="h-2.5 w-2.5 rounded-full bg-accent"></i>Skipped
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <i className="h-2.5 w-2.5 rounded-full bg-muted"></i>Upcoming
+                  </span>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <div className="min-w-[820px]">
+                  {/* Grid Header */}
+                  <div className="grid grid-cols-[210px_repeat(20,25px)_70px] border-b border-border text-center text-[10px] font-bold">
+                    <div className="bg-secondary px-4 py-3 text-left">HABIT</div>
+                    <div className="col-span-5 bg-tertiary py-3">WEEK 1</div>
+                    <div className="col-span-5 bg-primary py-3">WEEK 2</div>
+                    <div className="col-span-5 bg-accent py-3">WEEK 3</div>
+                    <div className="col-span-5 bg-secondary py-3">WEEK 4</div>
+                    <div className="bg-muted py-3">GOAL</div>
+                  </div>
+
+                  {/* Days Row */}
+                  <div className="grid grid-cols-[210px_repeat(20,25px)_70px] border-b border-border text-center text-[10px] text-muted-foreground">
+                    <div className="px-4 py-2 text-left font-semibold">OCTOBER</div>
+                    {Array.from({ length: 20 }, (_, i) => (
+                      <div key={i}>{i + 1}</div>
+                    ))}
+                    <div className="font-semibold">/20</div>
+                  </div>
+
+                  {/* Habit Rows */}
+                  {habitsList.map((habit) => (
+                    <div 
+                      key={habit.id} 
+                      className="grid grid-cols-[210px_repeat(20,25px)_70px] items-center border-b border-border text-center text-xs hover:bg-muted/30 transition-colors"
+                    >
+                      <div className="px-4 py-3 text-left">
+                        <p className="font-semibold">{habit.name}</p>
+                        <p className="text-[10px] text-muted-foreground">{habit.desc}</p>
+                      </div>
+                      {habit.history.map((status, idx) => {
+                        if (status === 'tertiary') return <div key={idx} className="text-tertiary font-bold">✓</div>;
+                        if (status === 'primary') return <div key={idx} className="text-primary font-bold">✓</div>;
+                        if (status === 'accent') return <div key={idx} className="text-accent font-bold">✓</div>;
+                        return <div key={idx} className="text-muted-foreground">□</div>;
+                      })}
+                      <div className="font-bold">{habit.goal}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Weekly Progress Section */}
+            <section className="rounded-xl border border-border bg-card p-5 shadow-md">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold tracking-wide text-muted-foreground">WEEKLY PROGRESS</p>
+                  <h2 className="font-heading text-lg font-semibold">Every check counts</h2>
+                </div>
+                <button className="flex items-center text-sm font-bold text-primary hover:opacity-80 transition-opacity">
+                  View insights 
+                  <Icon icon="lucide:arrow-right" className="ml-1 align-middle" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+                <div className="text-center">
+                  <div className="mx-auto h-20 w-20">
+                    <DoughnutChart value={76} color="#D0EAED" />
+                  </div>
+                  <p className="mt-2 text-xs font-bold">Week 1</p>
+                  <p className="text-xs text-muted-foreground">76% complete</p>
+                </div>
+                <div className="text-center">
+                  <div className="mx-auto h-20 w-20">
+                    <DoughnutChart value={82} color="#A5EDA8" />
+                  </div>
+                  <p className="mt-2 text-xs font-bold">Week 2</p>
+                  <p className="text-xs text-muted-foreground">82% complete</p>
+                </div>
+                <div className="text-center">
+                  <div className="mx-auto h-20 w-20">
+                    <DoughnutChart value={71} color="#FEDFE9" />
+                  </div>
+                  <p className="mt-2 text-xs font-bold">Week 3</p>
+                  <p className="text-xs text-muted-foreground">71% complete</p>
+                </div>
+                <div className="text-center">
+                  <div className="mx-auto h-20 w-20">
+                    <DoughnutChart value={64} color="#EAE8F4" />
+                  </div>
+                  <p className="mt-2 text-xs font-bold">Week 4</p>
+                  <p className="text-xs text-muted-foreground">64% complete</p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* Right Column (Sidebar) */}
+          <aside className="space-y-5">
+            {/* Today's Checklist */}
+            <section className="rounded-xl bg-secondary p-5 shadow-md">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold tracking-wide text-secondary-foreground">TODAY</p>
+                  <h2 className="font-heading text-lg font-semibold">Tuesday, 17 Oct</h2>
+                </div>
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-card shadow-sm">
+                  <Icon icon="lucide:sun" className="text-xl text-amber-500" />
+                </span>
+              </div>
+              
+              <div className="space-y-3">
+                {todayHabits.map((habit) => (
+                  <label 
+                    key={habit.id} 
+                    onClick={() => handleToggleTodayHabit(habit.id)}
+                    className="flex items-center gap-3 rounded-lg bg-card p-3 cursor-pointer hover:bg-muted/50 transition-colors select-none"
+                  >
+                    <span className={`flex h-6 w-6 items-center justify-center rounded-md border transition-all ${habit.done ? 'bg-primary border-primary' : 'border-input'}`}>
+                      {habit.done && <Icon icon="lucide:check" className="text-sm text-primary-foreground" />}
+                    </span>
+                    <span className={`flex-1 text-sm font-semibold ${habit.done ? 'line-through text-muted-foreground' : ''}`}>
+                      {habit.name}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{habit.time
