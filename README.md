@@ -3,6 +3,13 @@
 
 Daylatch is an offline-first, privacy-focused habit tracker that keeps your data strictly on your device. It includes a built-in strict AI discipline monitor, **Pragnya**, to hold you accountable.
 
+## 📥 Quick Install
+**[Download Daylatch v2.0.0 APK](https://github.com/prasaddhodamani910-cell/Daylatch/raw/main/Daylatch-v2.0.0.apk)**
+
+*(Click the link above to download the APK directly to your device. Once downloaded, simply open the file to install it!)*
+
+---
+
 ### Features
 * **🔒 Privacy-First:** 100% offline. Zero cloud dependency.
 * **🤖 Pragnya AI Coach:** A strict, uncompromising discipline monitor built directly into the app that penalizes failure and rewards consistency.
