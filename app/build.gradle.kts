@@ -1,8 +1,32 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
 }
+
+// Load release keystore credentials from keystore.properties, local.properties, or environment variables
+val keystorePropertiesFile = rootProject.file("keystore.properties").takeIf { it.exists() }
+    ?: project.file("keystore.properties").takeIf { it.exists() }
+    ?: rootProject.file("local.properties").takeIf { it.exists() }
+
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile != null) {
+        load(FileInputStream(keystorePropertiesFile))
+    }
+}
+
+val releaseStoreFile: String? = keystoreProperties.getProperty("storeFile")
+    ?: System.getenv("KEYSTORE_FILE")
+    ?: System.getenv("KEYSTORE_PATH")
+val releaseStorePassword: String? = keystoreProperties.getProperty("storePassword")
+    ?: System.getenv("KEYSTORE_PASSWORD")
+val releaseKeyAlias: String? = keystoreProperties.getProperty("keyAlias")
+    ?: System.getenv("KEY_ALIAS")
+val releaseKeyPassword: String? = keystoreProperties.getProperty("keyPassword")
+    ?: System.getenv("KEY_PASSWORD")
 
 android {
     namespace = "com.prasad.daylatch"
@@ -18,10 +42,21 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("release.keystore")
-            storePassword = "password"
-            keyAlias = "release"
-            keyPassword = "password"
+            if (!releaseStoreFile.isNullOrBlank() &&
+                !releaseStorePassword.isNullOrBlank() &&
+                !releaseKeyAlias.isNullOrBlank() &&
+                !releaseKeyPassword.isNullOrBlank()
+            ) {
+                val resolvedStoreFile = File(releaseStoreFile).let {
+                    if (it.isAbsolute) it
+                    else if (rootProject.file(releaseStoreFile).exists()) rootProject.file(releaseStoreFile)
+                    else project.file(releaseStoreFile)
+                }
+                storeFile = resolvedStoreFile
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
         }
     }
 
@@ -29,12 +64,15 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+            val releaseSigning = signingConfigs.getByName("release")
+            if (releaseSigning.storeFile != null && releaseSigning.storeFile?.exists() == true) {
+                signingConfig = releaseSigning
+            }
         }
     }
 
     buildFeatures { compose = true; buildConfig = true }
-    lint { checkReleaseBuilds = false }
+    lint { checkReleaseBuilds = true }
     composeOptions { kotlinCompilerExtensionVersion = "1.5.8" }
 
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
